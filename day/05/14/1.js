@@ -1,5 +1,20 @@
-let s = "{\"content\":\"您好！监控设备\\\"161329889\\\"监测到有木虱，请及时采取防护措施，以免造成损失，谢谢！\",\"photoUrl\":[\"http://img.sondon.net/161329889/2018/0515/20180515104525325.jpg\"]}";
-
-JSON.parse(s)
-
-console.log(s);
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    console.log('async1 end');
+}
+async function async2() {
+    console.log('async2');
+}
+console.log('script start');
+setTimeout(function() {
+    console.log('setTimeout');
+}, 0);
+async1();
+new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+});
+console.log('script end');

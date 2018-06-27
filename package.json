@@ -11,6 +11,8 @@
   "dependencies": {
     "agentkeepalive": "^3.4.1",
     "array-slice": "^1.1.0",
+    "async": "^2.6.1",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "group-array": "^0.3.3",
     "http-proxy-middleware": "^0.18.0",
@@ -25,6 +27,7 @@
     "moment-range": "^3.1.1",
     "node-gyp": "^3.6.2",
     "oppressor": "0.0.1",
+    "slug": "^0.9.1",
     "vue": "^2.5.16",
     "vue-server-renderer": "^2.5.16",
     "xregexp": "^4.1.1",

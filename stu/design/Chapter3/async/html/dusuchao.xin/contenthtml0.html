@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>dsc's Blog</title>
+    <link rel="shortcut icon" href="images/gaxiao.png">
+
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="css/content.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_508783_kxudw0jynq.css"></link>
+    <link href="css/markdown.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/gitment.css">
+    <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-light.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="spinners">
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+    <div class='card-holder'>
+        <div class='card-wrapper animate-box'>
+            <a href='blog.html'>
+                <div class='card bg-01'>
+                    <span class='card-content'>主页</span>
+                    <span class="card-icon">
+                        <i class="iconfont icon-homepage_fill"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class='card-wrapper animate-box'>
+            <a href='archives.html'>
+                <div class='card bg-02'>
+                    <span class='card-content'>归档</span>
+                    <span class="card-icon">
+                        <i class="iconfont icon-activity_fill"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class='card-wrapper animate-box'>
+            <a href='about.html'>
+                <div class='card bg-03'>
+                    <span class='card-content'>关于</span>
+                    <span class="card-icon">
+                        <i class="iconfont icon-people_fill"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class='card-wrapper animate-box'>
+            <div class='card bg-04'>
+                <span class="card-icon">
+                    <i class="iconfont icon-mulu"></i>
+                </span>
+                <div id="sidebar-inner"></div>
+                <div class="anchor card-content" style="display:block;">
+                    <a href="#comment">留言</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container areas-i">
+        <div class="content radius animate-box">
+            <section>
+                <article class="animate-box">
+                    <header class="animate-box">
+                        <!-- <h1 class="title">
+                            <a class="link" href="content.html">
+                                北京烤鸭好吃吗？？
+                            </a>
+                        </h1>
+                        <div class="post-meta">
+                            <span>发表于 2018-01-30</span>
+                            <span class="post-meta-divider">|</span>
+                            <span>
+                                <i class="iconfont icon-chat"></i>
+                            </span>
+                            <a href="content.html?1#container">
+                                <span>2</span>
+                            </a>
+                        </div> -->
+                    </header>
+                    <br>
+                    <div class="markdown-body" id="preview" class="animate-box"></div>
+                    <footer>
+                        <div class="post-nav">
+                            <div class="post-nav-next post-nav-item">
+                                <!-- <a href="/2016/02/27/continuous-integration-with-travis-ci/" rel="next" title="用TravisCI来做持续集成">
+                                            <i class="iconfont icon-xiangzuo1"></i> <span class="sp">用TravisCI来做持续集成</span>
+                                        </a> -->
+                            </div>
+
+                            <span class="post-nav-divider"></span>
+
+                            <div class="post-nav-prev post-nav-item">
+                                <!-- <a href="/2017/02/21/recent-overseas-interview-experiences/" rel="prev" title="最近的海外面试（前端）经历">
+                                            最近的海外面试（前端）经历 <i class="iconfont icon-xiangyou1"></i>
+                                        </a> -->
+                            </div>
+                        </div>
+                    </footer>
+
+                    <div id="comment" style="text-align: left; margin-top: 50px;"></div>
+                </article>
+            </section>
+        </div>
+        <div class="footer animate-box">
+            <p>2017 dsc's Blog - Hosted by gitHub</p>
+        </div>
+        <div class="gototop">
+            <div class="js-gotop">
+                <i class="iconfont icon-arrows-4-7"></i>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+<script src="https://cdn.bootcss.com/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="js/marked.js"></script>
+<script src="js/gitment.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<script src="js/main.js"></script>
+
+<script src="js/util.js"></script>
+<script src="md/catalogue.js"></script>
+
+<script>
+    let data = new JsonDate();
+
+    let index = GetRequest();
+
+    let info = data.getCatalogueInfo(index);
+
+    if (!info) window.location.href = '404.html';
+
+    $.ajax({
+        type: 'get',
+        url: `http://dusuchao.xin/md/${info.title}.md`,
+        async: false,
+        success: data => {
+            $('#preview')[0].innerHTML = marked(data);
+            hljs.initHighlightingOnLoad();
+            $('.spinners').hide('slow');
+            window.onload = () => {
+                showImage();
+                blank();
+
+                let html = '';
+                $(":header").each(function (i) {
+                    $(this).attr({ id: `anchor${i}` })
+
+                    html += `<div class="anchor card-content" style="display:block;">
+                            <a href="#anchor${i}">${$(this).text()}</a>
+                        </div>
+                    `;
+                });
+                $('#sidebar-inner').append(html);
+
+                goToAnchor();
+
+            }
+        },
+        error: data => {
+            if (data.status !== 200) window.location.href = '404.html';
+        }
+    })
+
+    $('header').append(`  <h1 class="title">
+                            ${info.title}
+                        </h1>
+                        <div class="post-meta">
+                            <span>发表于 ${dateFormat(info.createTime)}</span>
+                            <span class="post-meta-divider">|</span>
+                            <span><i class="iconfont icon-chat"></i></span>
+                            <a href="#comment" itemprop="discussionUrl">
+                                <span id="comments"></span>
+                            </a>
+                        </div>`);
+    if (info.next) $('.post-nav-prev').append(`<a href="content.html?${index + 1}" rel="prev" title="${info.next}"><span class="sp">${info.next}</span><i class="iconfont icon-xiangyou1"></i></a>`);
+    if (info.prev) $('.post-nav-next').append(`<a href="content.html?${index - 1}" rel="next" title="${info.prev}"><i class="iconfont icon-xiangzuo1"></i> <span class="sp">${info.prev}</span></a>`);
+
+    let gitment = new Gitment({
+        id: info.id,
+        title: info.title,
+        owner: 's546328100',
+        repo: 'dsc.github.io',
+        oauth: {
+            client_id: '007464c4121cc1ad2c46',
+            client_secret: '0947001f59de45b8c6eb142f459b099af6814535',
+        },
+    })
+    // gitment.loadMeta()
+    gitment.render('comment');
+
+    function GetRequest() {
+        var url = location.search;
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("#");
+            return parseInt(strs[0]);
+        }
+    }
+</script>
+
+</html>

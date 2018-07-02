@@ -1,6 +1,6 @@
-const isArrayLike = require('./isArrayLike');
-const wrapAsync = require('./wrapAsync');
-const iterator = require('./iterator');
+const isArrayLike = require('../isArrayLike');
+const wrapAsync = require('../wrapAsync');
+const iterator = require('../iterator');
 
 var eachOfSeries = doLimit(eachOfLimit, 1);
 

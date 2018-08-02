@@ -1,0 +1,8 @@
+let args = process.argv;
+let num = 0;
+
+for (let i = 2; i < args.length; i++) {
+    num += (+args[i]);
+}
+
+console.log(num);

@@ -1,4 +1,4 @@
-const isArrayLike = require('../isArrayLike');
+const isArrayLike = require('./isArrayLike');
 
 function keys(object) {
     return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);

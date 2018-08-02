@@ -6,8 +6,9 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const async = require('async');
 const utilities = require('./utilities');
+const {queue} = require('./queue/queue');
 
-var downloadQueue = async.queue((taskData, callback) => {
+var downloadQueue = queue((taskData, callback) => {
     spider(taskData.link, taskData.nesting - 1, callback);
 }, 2);
 
@@ -67,7 +68,7 @@ function spider(url, nesting, callback) {
     }
     spidering.set(url, true);
 
-    const filename = utilities.urlToFilename(url);
+    const filename = __dirname + '\\html\\' + utilities.urlToFilename(url);
     fs.readFile(filename, 'utf8', function(err, body) {
         if (err) {
             if (err.code !== 'ENOENT') {
@@ -86,7 +87,7 @@ function spider(url, nesting, callback) {
     });
 }
 
-spider(process.argv[2], 1, err => {
+spider('http://dusuchao.xin/content.html?0', 1, err => {
     if (err) {
         console.log(err);
         process.exit();

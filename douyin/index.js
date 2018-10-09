@@ -1,35 +1,96 @@
 const urllib = require('urllib');
 const cheerio = require('cheerio');
+const mongoose = require('mongoose');
 
-urllib
-  .request('https://www.douyin.com/share/user/84990209480')
-  .then(function(result) {
+mongoose.connect(
+  'mongodb://122.114.31.50:27017/food',
+  {useNewUrlParser: true}
+);
+const db = mongoose.connection;
+let model;
+
+db.on('error', console.error.bind(console, '连接错误：'));
+db.once('open', async callback => {
+  const schema = mongoose.Schema(
+    {
+      uid: String,
+      nickname: {type: String},
+      shortid: String,
+      extra: Array
+    },
+    {
+      timestamps: true
+    }
+  );
+
+  model = mongoose.model('douyin_user', schema);
+
+  let user = await model.findOne({}).sort('-createdAt');
+
+  let uid = 0;
+  if (user) uid = +user.uid + 1;
+
+  pq(uid);
+  console.log('MongoDB连接成功！！');
+});
+
+async function pq(uid) {
+  await iterator(uid);
+
+  async function iterator (uid) {
+    // console.log(uid);
+    let result = await urllib.request(`https://www.douyin.com/share/user/${uid}`).catch(err => {
+      console.log(err);
+      return null;
+    });
+
+    if (!result) {
+      uid = uid + 1;
+      await iterator(uid);
+      return;
+    }
+
     let html = result.data.toString();
-    // console.log(html);
 
     let $ = cheerio.load(html, {
       decodeEntities: false
     });
-    
+
     let nickname = $('p.nickname').text();
 
+    if (!nickname) {
+      uid = uid + 1;
+      await iterator(uid);
+      return;
+    }
+
     let short_id_raw = $('.shortid').text();
-    let short_id = getRealNum(short_id_raw);
+    let shortid = getRealNum(short_id_raw);
 
     // let location = $('span.location').text();
     let extra = [];
 
-    $('p.extra-info').children().each((i, e) => {
-      extra.push($(e).text());
-    })
-    
-    console.log(nickname);
-    console.log(short_id);
-    console.log(extra);
-  })
-  .catch(function(err) {
-    console.error(err);
-  });
+    $('p.extra-info')
+      .children()
+      .each((i, e) => {
+        extra.push($(e).text());
+      });
+
+    console.log(uid + ' ' +nickname + ' ' + shortid + ' ' + extra);
+
+    await model.create({
+      uid,
+      nickname,
+      shortid,
+      extra
+    });
+    uid = uid + 1;
+
+    await sleep(5000);
+
+    await iterator(uid);
+  }
+}
 
 function getRealNum(string) {
   // console.log('get real number');
@@ -79,4 +140,12 @@ function getRealNum(string) {
     else result += string[i];
   }
   return result;
+}
+
+function sleep(time = 0) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
 }

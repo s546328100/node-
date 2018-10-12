@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 
-const socket = io('http://localhost:7001/push', {query: {token: 'JDJhJDEwJDZ5d1Nib2xvY0xwTW5lU0oyaGVwUk9OV2U1cmdRb0ZpVW9VZktHNHNHdXA1RDh0QUZ6ZGYuMTUzODk3MDQ1NDEzMg=='}});
+const socket = io('http://localhost:7001/push', {query: {token: 'JDJhJDEwJGIvSDVLV1V3SlRtU3puMlVibEtBcU82MEc3Z3hsZzdwNDFRYkJmYW8xZ3BPQ2ozaEcvdDhpMTUzOTI0OTU0OTQyNw=='}});
 socket.on('connect', function() {
   console.log(socket.id);
   console.log('123');
